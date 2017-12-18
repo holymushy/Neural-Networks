@@ -10,9 +10,14 @@ import java.util.Random;
  */
 public class neuralNetwork{
 	private static double inodes,hnodes,onodes,lr;
-	// The weightRange is determine by the amount of nodes 
-	final static double weightRange = 1/Math.sqrt(3); //.577 if you didn't know
-	private static double weights;
+	private static int error;
+	private static double sumOfInputAndHiddenLayers = 0;
+	private static double sumOfHiddenAndOutputLayers = 0;
+	private static double weights[] = new double[3];
+	private static double inputs[] = new double[3];
+	// The weightRange is determine by the number of links into a node
+	final static double weightRange = 1/Math.sqrt(3); //.577 
+
 	/**
 	 * 
 	 */
@@ -23,36 +28,61 @@ public class neuralNetwork{
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		initialize(0,0,0,0);
-		System.out.println("The input nodes are " + inodes);
-		System.out.println("The hidden nodes are " + hnodes);
-		System.out.println("The output nodes are " + onodes);
-		System.out.println("The learning rate is " + onodes);
-		System.out.println("The random weights are " + weights);
-
+		initialize(3,0,0,.5);
+		//testing area
+		System.out.println("The number of input nodes are " + inodes);
+		System.out.println("The number of hidden nodes are " + hnodes);
+		System.out.println("The number of output nodes are " + onodes);
+		System.out.println("The learning rate is " + lr);
+		System.out.print("The three starting weights are ");
+		System.out.println(weights[0] + " " + weights[1] + " " + weights[2]);
+		System.out.print("The three starting inputs are ");
+		System.out.println(inputs[0] + " " + inputs[1] + " " + inputs[2]);
+		
+		train();
+		//testing area
+		System.out.println("The sum of input matrix and weight matrix " + sumOfInputAndHiddenLayers);
 	}
 
 	/**
 	 * Initialize the Neural Network
 	 */
-	public static void initialize(int inputNode, int hiddenNodes, int outputNodes, int learningRate)	{
+	public static void initialize(int inputNodes, int hiddenNodes, int outputNodes, double learningRate)	{
 		// Set # of nodes in each input, hidden, and output layers
-		inodes = inputNode;
+		inodes = inputNodes;
 		hnodes = hiddenNodes;
 		onodes = outputNodes;
 		// learning rate
 		lr = learningRate;
 		// random weights
-		Random r = new Random();
-		double random = new Random().nextDouble();
-		weights = -weightRange + (random * (weightRange - -(weightRange)));
+		initializeWeights();
+		// starting inputs
+		initializeInputs();
+
 
 	}
+	private static void initializeWeights() {
+		double random = new Random().nextDouble();
+		double random1 = new Random().nextDouble();
+		double random2 = new Random().nextDouble();
+		// range of -.557 and +.577 for real application
+		weights[0] = (-weightRange + (random * (weightRange - -(weightRange))));
+		weights[1] = (-weightRange + (random1 * (weightRange - -(weightRange))));
+		weights[2] = (-weightRange + (random2 * (weightRange - -(weightRange))));
+		
+		// Defaults using slides
+	}
+	private static void initializeInputs() {
+		 inputs[0] = .9;
+		 inputs[1] = .1;
+		 inputs[2] = .8;
+	}
+
 	/**
 	 * Trains the Neural Network
 	 */
 	public static void train() {
-
+		sumOfInputAndHiddenLayers = dotProduct(inputs, weights);
 	}
 	/**	
 	 * Query the Neural NetWork
@@ -67,6 +97,7 @@ public class neuralNetwork{
 			sum += a[i] * b[i];}
 		return sum;
 	}
-
-
+	public static double sigmoid(int input) {
+		return 1/(1+Math.exp(input));
+	}
 }
