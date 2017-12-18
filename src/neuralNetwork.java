@@ -10,9 +10,10 @@ import java.util.Random;
  */
 public class neuralNetwork{
 	private static double inodes,hnodes,onodes,lr;
-	private static int error;
+	private static int error,desiredTarget, actualOutput;
 	private static double sumOfInputAndHiddenLayers = 0;
 	private static double sumOfHiddenAndOutputLayers = 0;
+	private static double outputOfInputAndHidderLayerAfterSigmoid = 0;
 	private static double weights[] = new double[3];
 	private static double inputs[] = new double[3];
 	// The weightRange is determine by the number of links into a node
@@ -42,6 +43,7 @@ public class neuralNetwork{
 		train();
 		//testing area
 		System.out.println("The sum of input matrix and weight matrix " + sumOfInputAndHiddenLayers);
+		System.out.println("The output after sigmoid of input matrix and weight matrix " + outputOfInputAndHidderLayerAfterSigmoid);
 	}
 
 	/**
@@ -66,16 +68,20 @@ public class neuralNetwork{
 		double random1 = new Random().nextDouble();
 		double random2 = new Random().nextDouble();
 		// range of -.557 and +.577 for real application
-		weights[0] = (-weightRange + (random * (weightRange - -(weightRange))));
-		weights[1] = (-weightRange + (random1 * (weightRange - -(weightRange))));
-		weights[2] = (-weightRange + (random2 * (weightRange - -(weightRange))));
+//		weights[0] = (-weightRange + (random * (weightRange - -(weightRange))));
+//		weights[1] = (-weightRange + (random1 * (weightRange - -(weightRange))));
+//		weights[2] = (-weightRange + (random2 * (weightRange - -(weightRange))));
 		
-		// Defaults using slides
+		// Defaults using slides 
+		weights[0] = 0.9;	
+		weights[1] = 0.3;
+	//	weights[2] = 0.3;
 	}
 	private static void initializeInputs() {
-		 inputs[0] = .9;
-		 inputs[1] = .1;
-		 inputs[2] = .8;
+		// Defaults using slides yields 
+		 inputs[0] = 1;
+		 inputs[1] = .5;
+		 //inputs[2] = .8;
 	}
 
 	/**
@@ -83,6 +89,7 @@ public class neuralNetwork{
 	 */
 	public static void train() {
 		sumOfInputAndHiddenLayers = dotProduct(inputs, weights);
+		outputOfInputAndHidderLayerAfterSigmoid = sigmoid(sumOfInputAndHiddenLayers);
 	}
 	/**	
 	 * Query the Neural NetWork
@@ -97,7 +104,7 @@ public class neuralNetwork{
 			sum += a[i] * b[i];}
 		return sum;
 	}
-	public static double sigmoid(int input) {
-		return 1/(1+Math.exp(input));
+	public static double sigmoid(double sumOfInputAndHiddenLayers) {
+		return 1/(1+Math.exp(-sumOfInputAndHiddenLayers));
 	}
 }
