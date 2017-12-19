@@ -79,7 +79,7 @@ public class neuralNetwork{
 		// learning rate
 		lr = learningRate;
 		// random weights - can be adjusted
-		initializeWeights(9);
+		initializeWeights(3);
 		// starting inputs - can be adjusted
 		initializeInputs(.9,.1,.8);
 
@@ -87,22 +87,22 @@ public class neuralNetwork{
 
 	}
 	private static void initializeWeights(int w) {
-//		for(int i = 0; i < w;i++){
-//			double random = new Random().nextDouble();
-//			weights.add((-weightRange + (random * (weightRange - -(weightRange)))));
-//		}
-		//Default numbers from slides
-		weights.add(.9);
-		weights.add(.3);
-		weights.add(.4);
-
-		weights.add(.2);
-		weights.add(.8);
-		weights.add(.2);
-		
-		weights.add(.1);
-		weights.add(.5);
-		weights.add(.6);
+		for(int i = 0; i < w;i++){
+			double random = new Random().nextDouble();
+			weights.add((-weightRange + (random * (weightRange - -(weightRange)))));
+		}
+		//Default numbers from slides gives 1.16 and .76133 respective, I have trouble w/ using arrays and arraylists
+//		weights.add(.9);
+//		weights.add(.3);
+//		weights.add(.4);
+//
+//		weights.add(.2);
+//		weights.add(.8);
+//		weights.add(.2);
+//		
+//		weights.add(.1);
+//		weights.add(.5);
+//		weights.add(.6);
 	}
 	private static void initializeInputs(double d, double e, double f) {
 		inputs.add(d);
@@ -122,10 +122,15 @@ public static void train() {
 	hidden.add(sumOfInputAndHiddenLayers);
 	outputOfInputAndHidderLayerAfterSigmoid = sigmoid(sumOfInputAndHiddenLayers);	
 
-//repeat for next layers
-//	sumOfHiddenAndOutputLayers = dotProduct(hidden, outputs);
-//	outputs.add(sumOfHiddenAndOutputLayers);
-//	outputOfHiddenAndOutputLayersAfterSigmoid = sigmoid(sumOfHiddenAndOutputLayers);
+	
+//	repeat for next layers since I could not generate the rest of the hidden outputs for output layer to use,
+// 	I will use other numbers to fill in the blanks to keep the code going w/ the dot product
+	outputs.add(2.0);
+	outputs.add(4.0);
+	outputs.add(6.0);
+	sumOfHiddenAndOutputLayers = dotProduct(hidden, outputs);
+	outputs.add(sumOfHiddenAndOutputLayers);
+	outputOfHiddenAndOutputLayersAfterSigmoid = sigmoid(sumOfHiddenAndOutputLayers);
 
 }
 
